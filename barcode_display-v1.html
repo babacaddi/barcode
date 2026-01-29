@@ -84,7 +84,7 @@
             try {
                 // Build API URL - using the current page's base URL
                 // In production, replace with actual API URL
-                const apiUrl = window.location.origin + window.location.pathname.replace('barcode_display-v1', 'barcode_api-v1');
+                const apiUrl = window.location.origin + window.location.pathname.replace('barcode_display', 'barcode_api');
                 const params = new URLSearchParams();
                 params.set('text', text);
                 params.set('format', format);
