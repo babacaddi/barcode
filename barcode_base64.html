@@ -44,7 +44,17 @@
                     ctx.drawImage(img, 0, 0);
                     
                     const base64 = canvas.toDataURL('image/png');
-                    document.body.textContent = base64;
+                    
+                    const jsonResponse = {
+                        success: true,
+                        text: text,
+                        format: format,
+                        width: parseInt(width),
+                        height: parseInt(height),
+                        image: base64
+                    };
+                    
+                    document.body.textContent = JSON.stringify(jsonResponse);
                 };
 
                 img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));

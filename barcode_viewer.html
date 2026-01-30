@@ -38,16 +38,25 @@
 
                 // Fetch base64 encoding
                 const response = await fetch(apiUrl);
-                const base64Data = await response.text();
-                console.log("base64Data: "+base64Data);
+                const responseText = await response.text();
 
-                if (base64Data.startsWith('ERROR:')) {
-                    document.body.innerHTML = '<p>' + base64Data + '</p>';
+                if (responseText.startsWith('ERROR:') || responseText.includes('<h2>ERROR')) {
+                    document.body.innerHTML = '<p>' + responseText + '</p>';
+                    return;
+                }
+
+                console.log("responseText: "+responseText);
+
+                // Parse JSON response
+                const data = JSON.parse(responseText);
+                
+                if (!data.success || !data.image) {
+                    document.body.innerHTML = '<p>ERROR: Invalid response from barcode generator</p>';
                     return;
                 }
 
                 // Display the image
-                document.getElementById('barcodeImage').src = base64Data;
+                document.getElementById('barcodeImage').src = data.image;
 
             } catch (e) {
                 document.body.innerHTML = '<p>ERROR: ' + e.message + '</p>';
