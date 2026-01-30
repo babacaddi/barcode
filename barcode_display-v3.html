@@ -96,6 +96,7 @@
                 // Fetch from API
                 const response = await fetch(fullApiUrl);
                 const html = await response.text();
+                console.log("html: "+html);
                 
                 // Extract JSON from <pre> tag
                 const preStart = html.indexOf('<pre>');
