@@ -39,6 +39,7 @@
                 // Fetch base64 encoding
                 const response = await fetch(apiUrl);
                 const base64Data = await response.text();
+                console.log("base64Data: "+base64Data);
 
                 if (base64Data.startsWith('ERROR:')) {
                     document.body.innerHTML = '<p>' + base64Data + '</p>';
