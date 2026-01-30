@@ -80,27 +80,29 @@
             
             iframe.onload = function() {
                 try {
-                    // Get the base64 string from the iframe's window object
-                    const base64Image = iframe.contentWindow.barcodeBase64;
-                    console.log("___ base64Image: "+base64Image);
+                    // Get the JSON response from the iframe's window object
+                    const jsonData = iframe.contentWindow.barcodeResponse;
+                    console.log("___ jsonData: "+jsonData);
                     
-                    if (base64Image && base64Image.startsWith('data:image')) {
+                    if (jsonData && jsonData.barcode) {
+                        console.log("___ jsonData.barcode: "+jsonData.barcode);
+                        
                         // Display the barcode image
                         contentDiv.innerHTML = `
                             <div class="barcode-container">
-                                <img src="${base64Image}" alt="Barcode for ${barcodeText}">
+                                <img src="${jsonData.barcode}" alt="Barcode for ${jsonData.text}">
                                 <div class="barcode-text">
-                                    <strong>Text:</strong> ${barcodeText}<br>
-                                    <strong>Type:</strong> ${barcodeType}<br>
-                                    <strong>Width:</strong> ${barcodeWidth} | <strong>Height:</strong> ${barcodeHeight}
+                                    <strong>Text:</strong> ${jsonData.text}<br>
+                                    <strong>Type:</strong> ${jsonData.type}<br>
+                                    <strong>Width:</strong> ${jsonData.width} | <strong>Height:</strong> ${jsonData.height}
                                 </div>
                             </div>
                         `;
-                    } else {
-                        // Try to get error message from iframe body
-                        const errorMsg = iframe.contentWindow.document.body.textContent;
+                    } else if (jsonData && jsonData.error) {
                         contentDiv.className = 'error';
-                        contentDiv.innerHTML = `Error: ${errorMsg || 'Failed to generate barcode'}`;
+                        contentDiv.innerHTML = `Error: ${jsonData.error}`;
+                    } else {
+                        throw new Error('No response data available');
                     }
                     
                     // Remove the iframe after a short delay
